@@ -8,6 +8,8 @@ class GameView {
 
 	private $gameModel;
 
+	private $userPlayed = false;
+
 	public function __construct(GameModel $gameModel){
 		$this->gameModel = $gameModel;
 	}
@@ -41,29 +43,70 @@ class GameView {
 		';
 	}
 	private function result(){
-			if($this->gameModel->didUserWin())
+			if($this->userPlayed)
 			{
-				return "DU VANN!";
+				$resultstring = 'You chose ' . $this->userChoiceAsString() . ' and the computer chose '.$this->computerMoveAsString();
+				if($this->gameModel->didUserWin())
+				{
+					$resultstring.=" DU VANN!";
+				}
+				else if($this->userChoiceAsString() == $this->computerMoveAsString())
+				{
+					$resultstring.=" DET BLEV LIKA!";
+				}
+				else
+				{
+					$resultstring.=" Du SUGER!";
+				}
+				return $resultstring;
 			}
-			else
-				return "Du SUGER!";
 	}
-
+	public function userChoiceAsString(){
+		if($this->userChoseRock())
+		{
+			return 'rock';
+		}
+		if($this->userChosePaper())
+		{
+			return 'paper';
+		}
+		if($this->userChoseScissors())
+		{
+			return 'scissors';
+		}
+	}
+	public function computerMoveAsString(){
+			if($this->gameModel->getComputersMove() == choice::$rock)
+			{
+				return 'rock';
+			}
+			if($this->gameModel->getComputersMove() == choice::$paper)
+			{
+				return 'paper';
+			}
+			if($this->gameModel->getComputersMove() == choice::$scissors)
+			{
+				return 'scissors';
+			}
+	}
 	public function userChosePaper(){
 		if(isset($_POST[self::$paper]))
 		{
+			$this->userPlayed = true;
 			return true;
 		}
 	}
 	public function userChoseRock(){
 		if(isset($_POST[self::$rock]))
 		{
+			$this->userPlayed = true;
 			return true;
 		}
 	}
 	public function userChoseScissors(){
 		if(isset($_POST[self::$scissors]))
 		{
+			$this->userPlayed = true;
 			return true;
 		}
 	}

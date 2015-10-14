@@ -7,7 +7,7 @@ class LayoutView {
       <html>
         <head>
           <meta charset="utf-8">
-          <title>Login Example</title>
+          <title>RUCK PUPER SCUSSORS</title>
         </head>
         <body>
           <h1>ROCK PAPER SCISSORS!</h1>     

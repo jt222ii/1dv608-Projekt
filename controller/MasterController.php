@@ -6,6 +6,7 @@ require_once('view/StartView.php');
 //require_once('controller/GameController.php');
 //require_once('controller/StartController.php');
 require_once('model/GameModel.php');
+require_once('choices.php');
 
 class MasterController {
 	/*error_reporting(E_ALL);
@@ -18,15 +19,15 @@ class MasterController {
 			$v = new GameView($gm);
 			if($v->userChoseScissors())
 			{
-				$result = $gm->playGame('scissors');//ska bytas ut - hur gör man enum i php?
+				$result = $gm->playGame(choice::$scissors);
 			}	
 			else if($v->userChosePaper())
 			{
-				$result = $gm->playGame('paper');//ska bytas ut - hur gör man enum i php?
+				$result = $gm->playGame(choice::$paper);
 			}	
 			else if($v->userChoseRock())
 			{
-				$result = $gm->playGame('rock');//ska bytas ut - hur gör man enum i php?
+				$result = $gm->playGame(choice::$rock);
 			}	
 		}
 		else

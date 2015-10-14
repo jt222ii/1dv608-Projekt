@@ -1,10 +1,13 @@
 <?php
 class GameModel {
-	private $userWin = false;
-
+	private $userWin;
+	private $computerMove;
 	public function __construct()
 	{
 
+	}
+	public function getComputersMove(){
+		return $this->computerMove;
 	}
 	public function didUserWin(){
 		return $this->userWin;
@@ -13,40 +16,33 @@ class GameModel {
 	{
 		//test
 		//1 sax, 2 sten, 3 påse
-		$computerMove = rand(1, 3);//enumenumenumenum?!?!?!?
-		echo $computerMove;
-		if($userMove == 'scissors')
+		$this->computerMove = mt_rand(1, 3);
+		if($userMove == choice::$scissors)
 		{
-			if($computerMove == 3)//enumenumenumenum?!?!?!?
+			if($this->computerMove == choice::$paper)
 			{
 				$this->userWin = true;
-				return true;
 			}
 			else
 				$this->userWin = false;
-				return false;
 		}
-		else if($userMove == 'paper')
+		else if($userMove == choice::$paper)
 		{
-			if($computerMove == 2)//enumenumenumenum?!?!?!?
+			if($this->computerMove == choice::$rock)
 			{
 				$this->userWin = true;
-				return true;
 			}
 			else
 				$this->userWin = false;
-				return false;
 		}
-		else if($userMove == 'rock')
+		else if($userMove == choice::$rock)
 		{
-			if($computerMove == 1)//enumenumenumenum?!?!?!?
+			if($this->computerMove == choice::$scissors)
 			{
 				$this->userWin = true;
-				return true;
 			}
 			else
 				$this->userWin = false;
-				return false;
 		}
 	}
 }
