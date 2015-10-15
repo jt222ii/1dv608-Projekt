@@ -32,8 +32,18 @@ class MasterController {
 		}
 		else
 		{
+			if(isset($_SESSION["RoundsToPlay"]))
+			{	
+				unset($_SESSION["RoundsToPlay"]);
+			}
 			$v = new StartView();
+			if($v->userChoseGameMode())
+			{
+				$_SESSION["RoundsToPlay"] = $v->getHowManyRoundsToBePlayed();
+				header("location:?game");
+			}
 		}
 		$lv->render($v);
+		//unset($_SESSION["RoundsToPlay"]);
 	}
 }

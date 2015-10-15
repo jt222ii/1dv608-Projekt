@@ -30,13 +30,20 @@ class GameView {
 	* @return  void, BUT writes to standard output!
 	*/
 	private function gameForm() {
+		//ska tas bort
+		$test = "";
+		if(isset($_SESSION["RoundsToPlay"]))
+		{
+			$test = "This is a best of ".$_SESSION["RoundsToPlay"];
+		}
+		//
 		return '
 			<form method="post" > 
 				<fieldset>
-					<legend>Welcomu to the gume</legend>
+					<legend>Welcomu to the gume. ' . $test . '</legend>
 					<p> ' . $this->result() . ' </p>
-					<input type="submit" name="' . self::$rock . '" value="ROCK" />
-					<input type="submit" name="' . self::$paper . '" value="PAPER" />
+					<input type="submit" name="' . self::$rock . '" value="ROCK"/>
+					<input type="submit" name="' . self::$paper . '" value="PAPER"/>
 					<input type="submit" name="' . self::$scissors . '" value="SCISSORS"/>
 				</fieldset>
 			</form>
@@ -46,9 +53,9 @@ class GameView {
 			if($this->userPlayed)
 			{
 				$resultstring = 'You chose ' . $this->userChoiceAsString() . ' and the computer chose '.$this->computerMoveAsString();
-				if($this->gameModel->didUserWin())
+				if($this->gameModel->didUserWinTheRound())
 				{
-					$resultstring.=" DU VANN!";
+					$resultstring.=" DU VANN DENNA RUNDAN!";
 				}
 				else if($this->userChoiceAsString() == $this->computerMoveAsString())
 				{
