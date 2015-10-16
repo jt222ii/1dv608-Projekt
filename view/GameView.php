@@ -41,6 +41,7 @@ class GameView {
 			<form method="post" > 
 				<fieldset>
 					<legend>Welcomu to the gume. ' . $test . '</legend>
+					<p> ' . $this->getScoreString() . '</p>
 					<p> ' . $this->result() . ' </p>
 					<input type="submit" name="' . self::$rock . '" value="ROCK"/>
 					<input type="submit" name="' . self::$paper . '" value="PAPER"/>
@@ -95,6 +96,10 @@ class GameView {
 			{
 				return 'scissors';
 			}
+	}
+	public function getScoreString(){
+		$scores = $this->gameModel->getScore();
+		return $scores[0]."-".$scores[1];
 	}
 	public function userChosePaper(){
 		if(isset($_POST[self::$paper]))
