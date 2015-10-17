@@ -3,8 +3,8 @@
 
 class StartView {
 
-	private static $bestofthree = 'StartView::bestofthree';
-	private static $bestoffive = 'StartView::bestoffive';
+	private static $firsttothree = 'StartView::firsttothree';
+	private static $firsttofive = 'StartView::firsttofive';
 	public function __construct(){
 	}
 	public function response() {
@@ -18,15 +18,15 @@ class StartView {
 			<h2>VÄLJ ETT GAMEMODE!</h2>
 			<form method="post"> 
 				<fieldset>
-					<input type="submit" name="' . self::$bestofthree . '" value="bo3" />
-					<input type="submit" name="' . self::$bestoffive . '" value="bo5" />
+					<input type="submit" name="' . self::$firsttothree . '" value="First to 3" />
+					<input type="submit" name="' . self::$firsttofive . '" value="First to 5" />
 				</fieldset>
 			</form>
 		';
 	}
 
 	public function userChoseGameMode(){
-		if(isset($_POST[self::$bestofthree]) || isset($_POST[self::$bestoffive]))
+		if(isset($_POST[self::$firsttothree]) || isset($_POST[self::$firsttofive]))
 		{
 			return true;
 		}
@@ -34,11 +34,11 @@ class StartView {
 	}
 	public function getHowManyRoundsToBePlayed()
 	{
-		if(isset($_POST[self::$bestofthree]))
+		if(isset($_POST[self::$firsttothree]))
 		{
 			return 3;
 		}
-		if(isset($_POST[self::$bestoffive]))
+		if(isset($_POST[self::$firsttofive]))
 		{
 			return 5;
 		}

@@ -32,18 +32,23 @@ class MasterController {
 		}
 		else
 		{
-			if(isset($_SESSION["RoundsToPlay"]))
+			if(isset($_SESSION["playerScore"]) && isset($_SESSION["computerScore"]))//ska nog flytta allt detta till någon form av sessionhandler
+			{
+				unset($_SESSION["playerScore"]);
+				unset($_SESSION["computerScore"]);
+			}
+			if(isset($_SESSION["RoundsToWin"]))
 			{	
-				unset($_SESSION["RoundsToPlay"]);
+				unset($_SESSION["RoundsToWin"]);
 			}
 			$v = new StartView();
 			if($v->userChoseGameMode())
 			{
-				$_SESSION["RoundsToPlay"] = $v->getHowManyRoundsToBePlayed();
+				$_SESSION["RoundsToWin"] = $v->getHowManyRoundsToBePlayed();
 				header("location:?game");
 			}
 		}
 		$lv->render($v);
-		//unset($_SESSION["RoundsToPlay"]);
+		//unset($_SESSION["RoundsToWin"]);
 	}
 }

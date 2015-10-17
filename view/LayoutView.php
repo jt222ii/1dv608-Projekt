@@ -26,6 +26,6 @@ class LayoutView {
         return '<a href=?>Back to start</a>';
       }
       else
-      return '<a href=?game>Play casual</a>';
+      return '<a href=?game>Play Casual</a>';
   }
 }

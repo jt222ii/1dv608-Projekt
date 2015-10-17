@@ -9,12 +9,14 @@ class GameView {
 	private $gameModel;
 
 	private $userPlayed = false;
+	private $buttonStatus = "";
 
 	public function __construct(GameModel $gameModel){
 		$this->gameModel = $gameModel;
 	}
 
 	public function response() {
+		echo "rad 19 gameview: borde nog fixa buggen så att man inte kan fortsätta köra efter någon vunnit. Session eller något där med? skapa sessionhandler";
 		$response = "";
 		if(isset($_GET['game']) )
 		{
@@ -31,21 +33,21 @@ class GameView {
 	*/
 	private function gameForm() {
 		//ska tas bort
-		$test = "";
-		if(isset($_SESSION["RoundsToPlay"]))
+		$gameModeString = "";
+		if(isset($_SESSION["RoundsToWin"]))
 		{
-			$test = "This is a best of ".$_SESSION["RoundsToPlay"];
+			$gameModeString = "This is a first to ".$_SESSION["RoundsToWin"];
 		}
 		//
 		return '
 			<form method="post" > 
 				<fieldset>
-					<legend>Welcomu to the gume. ' . $test . '</legend>
+					<legend>Welcomu to the gume. ' . $gameModeString . '</legend>
 					<p> ' . $this->getScoreString() . '</p>
 					<p> ' . $this->result() . ' </p>
-					<input type="submit" name="' . self::$rock . '" value="ROCK"/>
-					<input type="submit" name="' . self::$paper . '" value="PAPER"/>
-					<input type="submit" name="' . self::$scissors . '" value="SCISSORS"/>
+					<input type="submit" name="' . self::$rock . '" value="ROCK" '. $this->buttonStatus. '/>
+					<input type="submit" name="' . self::$paper . '" value="PAPER" $buttonStatus '. $this->buttonStatus. '/>
+					<input type="submit" name="' . self::$scissors . '" value="SCISSORS" $buttonStatus '. $this->buttonStatus. '/>
 				</fieldset>
 			</form>
 		';
@@ -53,9 +55,14 @@ class GameView {
 	private function result(){
 			if($this->userPlayed)
 			{
-				$resultstring = 'You chose ' . $this->userChoiceAsString() . ' and the computer chose '.$this->computerMoveAsString();
+				$resultstring = 'You chose ' . $this->userChoiceAsString() . ' and the computer chose '.$this->computerMoveAsString().".";
 				if($this->gameModel->didUserWinTheRound())
 				{
+					if($this->gameModel->diduserWinTheGame()){
+						$resultstring.= " Du vann matchen!";
+						$this->disableInput();
+					}
+					else
 					$resultstring.=" DU VANN DENNA RUNDAN!";
 				}
 				else if($this->userChoiceAsString() == $this->computerMoveAsString())
@@ -64,6 +71,11 @@ class GameView {
 				}
 				else
 				{
+					if($this->gameModel->didcomputerWinTheGame()){
+						$resultstring.= " Du förlorade matchen!";
+						$this->disableInput();
+					}
+					else
 					$resultstring.=" Du SUGER!";
 				}
 				return $resultstring;
@@ -121,5 +133,8 @@ class GameView {
 			$this->userPlayed = true;
 			return true;
 		}
+	}
+	public function disableInput(){
+		$this->buttonStatus = "Disabled";
 	}
 }
