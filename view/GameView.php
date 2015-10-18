@@ -16,7 +16,11 @@ class GameView {
 	}
 
 	public function response() {
-		echo "rad 19 gameview: borde nog fixa buggen så att man inte kan fortsätta köra efter någon vunnit. Session eller något där med? skapa sessionhandler";
+		echo "Rad 19 gameview - Skapa sessionhandler";
+		if($this->gameModel->didUserWinTheGame() || $this->gameModel->didcomputerWinTheGame())
+		{
+			$this->disableInput();
+		}
 		$response = "";
 		if(isset($_GET['game']) )
 		{
@@ -58,9 +62,9 @@ class GameView {
 				$resultstring = 'You chose ' . $this->userChoiceAsString() . ' and the computer chose '.$this->computerMoveAsString().".";
 				if($this->gameModel->didUserWinTheRound())
 				{
+					//var_dump($this->gameModel->diduserWinTheGame());
 					if($this->gameModel->diduserWinTheGame()){
 						$resultstring.= " Du vann matchen!";
-						$this->disableInput();
 					}
 					else
 					$resultstring.=" DU VANN DENNA RUNDAN!";
@@ -73,7 +77,6 @@ class GameView {
 				{
 					if($this->gameModel->didcomputerWinTheGame()){
 						$resultstring.= " Du förlorade matchen!";
-						$this->disableInput();
 					}
 					else
 					$resultstring.=" Du SUGER!";

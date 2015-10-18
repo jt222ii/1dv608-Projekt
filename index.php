@@ -1,6 +1,8 @@
 <?php
-session_start();
-require_once('controller/MasterController.php');
 
-$mc = new MasterController();
-$mc->startApp();
+
+session_start();
+require_once('controller/GameController.php');
+
+$gc = new GameController();
+$gc->startApp();
