@@ -11,21 +11,26 @@ require_once('choices.php');
 class GameController {
 	/*error_reporting(E_ALL);
 	ini_set('display_errors', 'On');*/
+	private $LoginModel;
+	private $View;
+	public function __construct(LoginModel $LoginModel){
+		$this->LoginModel = $LoginModel;
+	}
 	public function startApp(){
 		$lv = new LayoutView();
 		if(isset($_GET['game']) )
 		{
 			$gm = new GameModel();
-			$v = new GameView($gm);
-			if($v->userChoseScissors())
+			$this->View = new GameView($gm);
+			if($this->View->userChoseScissors())
 			{
 				$result = $gm->playGame(choice::$scissors);
 			}	
-			else if($v->userChosePaper())
+			else if($this->View->userChosePaper())
 			{
 				$result = $gm->playGame(choice::$paper);
 			}	
-			else if($v->userChoseRock())
+			else if($this->View->userChoseRock())
 			{
 				$result = $gm->playGame(choice::$rock);
 			}	
@@ -41,13 +46,22 @@ class GameController {
 			{	
 				unset($_SESSION["RoundsToWin"]);
 			}
-			$v = new StartView();
-			if($v->userChoseGameMode())
+			$this->View = new StartView();
+			if($this->View->userChoseGameMode())
 			{
-				$_SESSION["RoundsToWin"] = $v->getHowManyRoundsToBePlayed();
+				$_SESSION["RoundsToWin"] = $this->View->getHowManyRoundsToBePlayed();
 				header("location:?game");
 			}
 		}
-		$lv->render($v);
+		return $this->View;
+	}
+	public function userPost(){
+		if(is_a($this->View, 'StartView'))
+		{
+			if ($this->View->userTriedToLogout() && $this->LoginModel->isUserLoggedIn())
+			{
+				$this->LoginModel->logout();	
+			}
+		}
 	}
 }

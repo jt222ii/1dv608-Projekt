@@ -5,6 +5,8 @@ class StartView {
 
 	private static $firsttothree = 'StartView::firsttothree';
 	private static $firsttofive = 'StartView::firsttofive';
+	private static $logout = 'LoginView::Logout';
+
 	public function __construct(){
 	}
 	public function response() {
@@ -21,6 +23,7 @@ class StartView {
 					<input type="submit" name="' . self::$firsttothree . '" value="First to 3" />
 					<input type="submit" name="' . self::$firsttofive . '" value="First to 5" />
 				</fieldset>
+				'.$this->generateLogoutButtonHTML().'
 			</form>
 		';
 	}
@@ -41,6 +44,19 @@ class StartView {
 		if(isset($_POST[self::$firsttofive]))
 		{
 			return 5;
+		}
+	}
+	private function generateLogoutButtonHTML() {
+		return '
+			<form  method="post" >
+				<input type="submit" name="' . self::$logout . '" value="logout"/>
+			</form>
+		';
+	}
+	public function userTriedToLogout(){
+		if(isset($_POST[self::$logout]))
+		{
+			return true;
 		}
 	}
 
