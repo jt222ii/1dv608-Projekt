@@ -46,7 +46,6 @@ class MasterController {
 				header($rootLocation);
 			}
 		}		
-		var_dump($lm->isUserLoggedIn());
 		$lv->render($v, $lm->isUserLoggedIn());
 	}
 }
