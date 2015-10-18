@@ -15,32 +15,38 @@ class MasterController {
 	/*error_reporting(E_ALL);
 	ini_set('display_errors', 'On');*/
 	public function startApp(){
+		$rootLocation = "Location:http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 		$lv = new LayoutView();
 		$ud = new userDAL();
 		$lm = new LoginModel($ud);
-		if(isset($_GET['register']))
-		{
-			$validate = new ValidateCredentials();
-			$v = new RegisterView($validate);
-			$rc = new RegisterController($v, $ud);
-			$rc->userPost();
-			if(isset($_SESSION['successfulRegistration']) && $_SESSION['successfulRegistration'] == true)
+		if(!$lm->isUserLoggedIn()){
+			if(isset($_GET['register']))
 			{
-				header("Location:http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);
-			}
-		}	
-		else if($lm->isUserLoggedIn())
-		{
-			$gc = new GameController($lm);
-			$v = $gc->startApp();
-			$gc->userPost();
+				$validate = new ValidateCredentials();
+				$v = new RegisterView($validate);
+				$c = new RegisterController($v, $ud);
+				$c->userPost();
+				if(isset($_SESSION['successfulRegistration']) && $_SESSION['successfulRegistration'] == true)
+				{
+					header($rootLocation);
+				}
+			}	
+			else
+			{
+				$v = new LoginView($lm);
+				$c = new LoginController($v, $lm);	
+				$c->userPost();
+			}	
 		}
-		else
+		if($lm->isUserLoggedIn())
 		{
-			$v = new LoginView($lm);
-			$lc = new LoginController($v, $lm);
-			$lc->userPost();	
-		}	
+			$c = new GameController($lm);
+			$v = $c->startApp();
+			if($c->userWantsToLogout()){
+				header($rootLocation);
+			}
+		}		
+		var_dump($lm->isUserLoggedIn());
 		$lv->render($v, $lm->isUserLoggedIn());
 	}
 }

@@ -55,12 +55,13 @@ class GameController {
 		}
 		return $this->View;
 	}
-	public function userPost(){
+	public function userWantsToLogout(){
 		if(is_a($this->View, 'StartView'))
 		{
 			if ($this->View->userTriedToLogout() && $this->LoginModel->isUserLoggedIn())
 			{
-				$this->LoginModel->logout();	
+				$this->LoginModel->logout();
+				return true;	
 			}
 		}
 	}

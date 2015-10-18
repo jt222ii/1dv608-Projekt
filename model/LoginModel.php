@@ -1,10 +1,6 @@
 <?php
 require_once('model/User.php');
 class LoginModel {
-
-
-	private $message;
-
 	private $userDAL;
 	private $user;
 
