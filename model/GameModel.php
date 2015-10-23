@@ -81,6 +81,7 @@ class GameModel {
 		var_dump("ta bort eller fixa denna");
 		//gör double run? fast inte alltid isf
 		//http://andrewgelman.com/2007/05/21/how_to_win_at_r/
+		//gör så att ju fler gånger användaren spelar något i rad ju större chans att datorn kontrar
 
 		//annars:
 		//hämta statistiken och välj beroende på det
