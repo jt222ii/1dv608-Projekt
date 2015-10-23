@@ -8,12 +8,13 @@ class LayoutView {
         <head>
           <meta charset="utf-8">
           <title>RUCK PUPER SCUSSORS</title>
+          <link rel="stylesheet" type="text/css" href="style.css" />
         </head>
         <body>
           <h1>ROCK PAPER SCISSORS!</h1>     
           <div class="container">
               ' . $this->generateRegisterLinkHTML($isLoggedIn) . '
-              ' . $this->generatePlayLink() . '
+              ' . $this->generatePlayLink($isLoggedIn) . '
               ' . $view->response() . '    
           </div>
          </body>
@@ -21,13 +22,16 @@ class LayoutView {
     ';
   }
 
-  private function generatePlayLink() {
+  private function generatePlayLink($isLoggedIn) {
+    if($isLoggedIn)
+    {
       if(isset($_GET['game']))
       {
         return '<a href=?>Back to start</a>';
       }
       else
       return '<a href=?game>Play Casual</a>';
+    }
   }
    private function generateRegisterLinkHTML($isLoggedIn) {
     if(!$isLoggedIn)

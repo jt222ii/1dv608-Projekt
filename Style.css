@@ -1,0 +1,24 @@
+p{
+	font-size: 20px;
+}
+.rock{
+	text-indent: -99999999999999px;
+	height: 128px;
+	width: 128px;
+	background:url("IMAGES/Rock.png");
+}
+.paper{
+	text-indent: -99999999999999px;
+	height: 128px;
+	width: 128px;
+	background:url("IMAGES/Paper.png");
+}
+.scissor{
+	text-indent: -99999999999999px;
+	height: 128px;
+	width: 128px;
+	background:url("IMAGES/Scissor.png");
+}
+.score{
+	font-size: 28px;	
+}

@@ -47,11 +47,11 @@ class GameView {
 			<form method="post" > 
 				<fieldset>
 					<legend>Welcomu to the gume. ' . $gameModeString . '</legend>
-					<p> ' . $this->getScoreString() . '</p>
+					<p class="score"> ' . $this->getScoreString() . '</p>
+					<input type="submit" name="' . self::$rock . '" class="rock" value="ROCK" '. $this->buttonStatus. '/>
+					<input type="submit" name="' . self::$paper . '" class="paper" value="PAPER" $buttonStatus '. $this->buttonStatus. '/>
+					<input type="submit" name="' . self::$scissors . '" class="scissor" value="SCISSORS" $buttonStatus '. $this->buttonStatus. '/>
 					<p> ' . $this->result() . ' </p>
-					<input type="submit" name="' . self::$rock . '" value="ROCK" '. $this->buttonStatus. '/>
-					<input type="submit" name="' . self::$paper . '" value="PAPER" $buttonStatus '. $this->buttonStatus. '/>
-					<input type="submit" name="' . self::$scissors . '" value="SCISSORS" $buttonStatus '. $this->buttonStatus. '/>
 				</fieldset>
 			</form>
 		';
@@ -64,22 +64,22 @@ class GameView {
 				{
 					//var_dump($this->gameModel->diduserWinTheGame());
 					if($this->gameModel->diduserWinTheGame()){
-						$resultstring.= " Du vann matchen!";
+						$resultstring.= " You won the game!";
 					}
 					else
-					$resultstring.=" DU VANN DENNA RUNDAN!";
+					$resultstring.=" You won the round!";
 				}
 				else if($this->userChoiceAsString() == $this->computerMoveAsString())
 				{
-					$resultstring.=" DET BLEV LIKA!";
+					$resultstring.=" It's a tie!";
 				}
 				else
 				{
 					if($this->gameModel->didcomputerWinTheGame()){
-						$resultstring.= " Du förlorade matchen!";
+						$resultstring.= " You lost the game!";
 					}
 					else
-					$resultstring.=" Du SUGER!";
+					$resultstring.=" You lost the round!";
 				}
 				return $resultstring;
 			}

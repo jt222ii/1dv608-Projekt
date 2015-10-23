@@ -17,7 +17,6 @@ class GameModel {
 		}
 	}
 	public function getComputersMove(){
-		var_dump($this->computerMove);
 		return $this->computerMove;
 	}
 	public function diduserWinTheRound(){
@@ -44,6 +43,7 @@ class GameModel {
 	{
 		//test
 		//1 sax, 2 sten, 3 påse
+		$this->rndMoveFromStats(); // ta bort eller använd istället för mt_rand
 		$this->computerMove = mt_rand(1, 3);
 		if(!$this->diduserWinTheGame() && !$this->didcomputerWinTheGame())
 		{
@@ -74,6 +74,46 @@ class GameModel {
 			{
 				$this->userDAL->addResultToUser($this->diduserWinTheGame(), $_SESSION['LoggedInUser']);
 			}
+		}
+	}
+
+	public function rndMoveFromStats(){
+		var_dump("ta bort eller fixa denna");
+		//gör double run? fast inte alltid isf
+		//http://andrewgelman.com/2007/05/21/how_to_win_at_r/
+
+		//annars:
+		//hämta statistiken och välj beroende på det
+		//byt ut siffrorna till att hämta en array istället 
+		$totalUserMoves = 1200; 
+		$totalRock = 400;
+		$totalPaper = 400;
+		$totalScissor = 400;
+
+		$rockProbability = $totalRock/$totalUserMoves;
+		$paperProbability = $totalPaper/$totalUserMoves;
+		$scissorProbability = $totalScissor/$totalUserMoves;
+		$rnd = mt_rand(1, 100);
+
+		$maxToCounterRock = $rockProbability*100;
+		$maxToCounterPaper = $maxToCounterRock + $paperProbability*100;
+		$maxToCounterScissor = $maxToCounterPaper + $scissorProbability*100;
+		if($rnd <= $maxToCounterRock)
+		{
+			echo "Kontrar sten";
+			return choice::$paper;
+		}
+
+		else if($rnd <= $maxToCounterPaper)
+		{
+			echo "Kontrar papper";
+			return choice::$scissors;
+		}
+		
+		else if($rnd <= $maxToCounterScissor)
+		{
+			echo "Kontrar sax";
+			return choice::$rock;
 		}
 	}
 	
