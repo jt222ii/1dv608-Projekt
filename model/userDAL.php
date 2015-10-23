@@ -47,15 +47,17 @@ class userDAL {
 		{
 			return null;
 		}
-		$user = new User($data['Username'],$data['Password'],false);
+		$user = new User($data['Username'], $data['Password'],false);
 		return $user;
 	}
+
 	//Checks if a user with a specific username already exists
 	public function userNameAlreadyExists($username)
 	{
 		$connection = $this->createConnection();
 		$sqlQuery = "SELECT Username, Password FROM member WHERE Username = '$username'";
 		$result = $connection->query($sqlQuery);
+		$this->closeConnection();
 		if($result->num_rows == 0)
 		{
 			return false;
@@ -63,5 +65,29 @@ class userDAL {
 		return true;
 	}
 
+	public function addResultToUser($didUserWin, $username)
+	{
+		$connection = $this->createConnection();
+		if($didUserWin)
+		{
+			$sqlQuery = "UPDATE member SET Wins = Wins + 1  WHERE Username = '$username'";
+		}
+		else
+		{
+			$sqlQuery = "UPDATE member SET Losses = Losses + 1  WHERE Username = '$username'";
+		}
+		$result = $connection->query($sqlQuery);
+		$this->closeConnection();
+	}
+
+	public function getUserStats($username)
+	{
+		$connection = $this->createConnection();
+		$sqlQuery = "SELECT Wins, Losses FROM member WHERE BINARY Username = '$username'";
+		$result = $connection->query($sqlQuery);
+		$this->closeConnection();
+		$userStats = $result->fetch_array(MYSQLI_ASSOC);
+		return $userStats;
+	}
 
 }

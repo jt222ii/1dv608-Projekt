@@ -13,14 +13,16 @@ class GameController {
 	ini_set('display_errors', 'On');*/
 	private $LoginModel;
 	private $View;
-	public function __construct(LoginModel $LoginModel){
+	private $userDAL;
+	public function __construct(LoginModel $LoginModel, userDAL $userDAL){
+		$this->userDAL = $userDAL;
 		$this->LoginModel = $LoginModel;
 	}
 	public function startApp(){
 		$lv = new LayoutView();
 		if(isset($_GET['game']) )
 		{
-			$gm = new GameModel();
+			$gm = new GameModel($this->userDAL);
 			$this->View = new GameView($gm);
 			if($this->View->userChoseScissors())
 			{
@@ -46,7 +48,8 @@ class GameController {
 			{	
 				unset($_SESSION["RoundsToWin"]);
 			}
-			$this->View = new StartView();
+			$this->userStats = $this->userDAL->getUserStats($_SESSION['LoggedInUser']);
+			$this->View = new StartView($this->userStats);
 			if($this->View->userChoseGameMode())
 			{
 				$_SESSION["RoundsToWin"] = $this->View->getHowManyRoundsToBePlayed();

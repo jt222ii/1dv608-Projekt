@@ -19,12 +19,14 @@ class LoginModel {
 		{
 			if($this->user->comparePassword($Pword))		
 			{			
-	 			$_SESSION['userLoggedIn'] = true;		
+	 			$_SESSION['userLoggedIn'] = true;
+	 			$_SESSION['LoggedInUser'] = $Uname;		
 			}
 		}
 	}
 	public function logout(){
- 			$_SESSION['userLoggedIn'] = false;			
+ 			$_SESSION['userLoggedIn'] = false;	
+ 			unset($_SESSION['LoggedInUser']);		
 	}
 	public function isUserLoggedIn(){
 		if($_SESSION['userLoggedIn'])

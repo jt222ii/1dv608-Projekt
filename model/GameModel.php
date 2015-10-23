@@ -5,9 +5,11 @@ class GameModel {
 	private $computerMove;
 	private $playerScore = "playerScore";
 	private $computerScore = "computerScore";
+	private $userDAL;
 
-	public function __construct()
+	public function __construct(userDAL $userDAL)
 	{
+		$this->userDAL = $userDAL;
 		if(!$this->isSessionsSet())
 		{
 			$_SESSION[$this->playerScore] = 0;
@@ -15,6 +17,7 @@ class GameModel {
 		}
 	}
 	public function getComputersMove(){
+		var_dump($this->computerMove);
 		return $this->computerMove;
 	}
 	public function diduserWinTheRound(){
@@ -41,9 +44,9 @@ class GameModel {
 	{
 		//test
 		//1 sax, 2 sten, 3 påse
+		$this->computerMove = mt_rand(1, 3);
 		if(!$this->diduserWinTheGame() && !$this->didcomputerWinTheGame())
 		{
-			$this->computerMove = mt_rand(1, 3);
 			if($userMove == choice::$scissors && $this->computerMove == choice::$paper)
 			{
 				$this->userWinRound = true;
@@ -59,7 +62,6 @@ class GameModel {
 			if($this->userWinRound)
 			{
 				$_SESSION[$this->playerScore]++;
-
 			}
 			else
 			{
@@ -67,6 +69,10 @@ class GameModel {
 				{
 					$_SESSION[$this->computerScore]++;
 				}
+			}
+			if($this->didcomputerWinTheGame() || $this->diduserWinTheGame())
+			{
+				$this->userDAL->addResultToUser($this->diduserWinTheGame(), $_SESSION['LoggedInUser']);
 			}
 		}
 	}

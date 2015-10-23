@@ -59,7 +59,7 @@ class GameView {
 	private function result(){
 			if($this->userPlayed)
 			{
-				$resultstring = 'You chose ' . $this->userChoiceAsString() . ' and the computer chose '.$this->computerMoveAsString().".";
+				$resultstring = 'You chose ' . $this->userChoiceAsString() . ' and the computer chose '. $this->computerMoveAsString() .".";
 				if($this->gameModel->didUserWinTheRound())
 				{
 					//var_dump($this->gameModel->diduserWinTheGame());
@@ -103,11 +103,11 @@ class GameView {
 			{
 				return 'rock';
 			}
-			if($this->gameModel->getComputersMove() == choice::$paper)
+			else if($this->gameModel->getComputersMove() == choice::$paper)
 			{
 				return 'paper';
 			}
-			if($this->gameModel->getComputersMove() == choice::$scissors)
+			else if($this->gameModel->getComputersMove() == choice::$scissors)
 			{
 				return 'scissors';
 			}
