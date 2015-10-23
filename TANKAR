@@ -1,0 +1,17 @@
+JNS: hmm vad tror du om AI't väljer ett move baserat på de tre senaste hela tiden?
+Orj Finkelstrut: det låter enklare
+JNS: eller hmm
+JNS: asså tycker iaf chansen för att de ska kontra något ska öka med hur många gånger de trycker på något
+JNS: så om sten är tryckt 3 gånger i rad ska datorn nästan alltid välja påse
+Orj Finkelstrut: du kan ju säga att om man tryckt sten typ 4/5 gånger
+Orj Finkelstrut: typ loopa igenom, plussa något varje gång samma grej väljs flera gånger
+Orj Finkelstrut: nollställa efter x antal omgångar
+JNS: mm måste ju iaf nollställa
+Orj Finkelstrut: men om de väljer sten 7 ggr på 10 försök så kan deju hålla koll på det
+Orj Finkelstrut: å börja kontra
+Orj Finkelstrut: etc
+Orj Finkelstrut: bara nån sån enklare grej
+JNS: för då slipper jag spara ner skit på databasen också
+Orj Finkelstrut: mm
+Orj Finkelstrut: det känns lite overkill
+JNS: skulle dock kunna spara ner typ "most common opening move" haha
