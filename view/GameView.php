@@ -16,7 +16,7 @@ class GameView {
 	}
 
 	public function response() {
-		echo "Rad 19 gameview - Skapa sessionhandler";
+		echo "Rad 19 gameview - Skapa sessionhandler, glöm inte heller felhantering i DAL";
 		if($this->gameModel->didUserWinTheGame() || $this->gameModel->didcomputerWinTheGame())
 		{
 			$this->disableInput();
