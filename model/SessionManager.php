@@ -16,7 +16,14 @@ class SessionManager{
 		$_SESSION[self::$IsUserLoggedIn] = $bool;
 	}
 	public function SessionGetIsUserLoggedIn(){
-		return $_SESSION[self::$IsUserLoggedIn];
+		if(isset($_SESSION[self::$IsUserLoggedIn]))
+		{
+			return $_SESSION[self::$IsUserLoggedIn];
+		}
+		return false;
+	}
+	public function SessionSetLoggedInUser($username){
+		$_SESSION[self::$LoggedInUser] = $username;
 	}
 	public function SessionGetLoggedInUser(){
 		if(isset($_SESSION[self::$LoggedInUser]))
@@ -32,7 +39,6 @@ class SessionManager{
 		{
 			return $_SESSION[self::$SuccessfulRegistration];
 		}
-		return false;
 	}
 	public function SessionUnsetSuccessfulRegistration()
 	{
@@ -43,6 +49,15 @@ class SessionManager{
 	}
 	public function SessionSuccessfulRegistrationUsername($username){
 		$_SESSION[self::$SuccessfulRegistrationUsername] = $username;
+	}
+	public function SessionGetSuccessfulRegistrationUsername(){
+		if(isset($_SESSION[self::$SuccessfulRegistrationUsername]))
+		{
+			return $_SESSION[self::$SuccessfulRegistrationUsername];
+		}
+	}
+	public function SessionUnsetSuccessfulRegistrationUsername(){
+		unset($_SESSION[self::$SuccessfulRegistrationUsername]);
 	}
 
 

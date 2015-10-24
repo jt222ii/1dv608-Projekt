@@ -48,7 +48,6 @@ class LoginView {
 
 	public function setMessage(){
 		$this->message = '';
-		//if(isset($_SESSION['successfulRegistration']) && $_SESSION['successfulRegistration'] == true) 
 		if($this->SessionManager->SessionGetSuccessfulRegistration())
 		{
 			$this->message = 'Registered new user.';
@@ -115,10 +114,10 @@ class LoginView {
 		}
 		else
 		{
-			if(isset($_SESSION['successfulRegistrationUsername']))
+			if($this->SessionManager->SessionGetSuccessfulRegistrationUsername() != null)
 			{
-				self::$keepName = $_SESSION['successfulRegistrationUsername'];
-				unset($_SESSION['successfulRegistrationUsername']);
+				self::$keepName = $this->SessionManager->SessionGetSuccessfulRegistrationUsername();
+				$this->SessionManager->SessionUnsetSuccessfulRegistrationUsername();
 			}
 			else
 			{

@@ -7,8 +7,10 @@ class StartView {
 	private static $firsttofive = 'StartView::firsttofive';
 	private static $logout = 'LoginView::Logout';
 	private $userStats;
+	private $SessionManager;
 
-	public function __construct($userStats){
+	public function __construct($userStats, SessionManager $SessionManager){
+		$this->SessionManager = $SessionManager;
 		$this->userStats = $userStats;
 	}
 	public function response() {
@@ -19,7 +21,7 @@ class StartView {
 
 	private function generateStartFormHTML() {
 		return '
-			<p>Välkommen '.$_SESSION['LoggedInUser'].'! Vinster/Förluster: '. $this->userStats['Wins'] .'/'.$this->userStats['Losses'].'</p>
+			<p>Välkommen '.$this->SessionManager->SessionGetLoggedInUser().'! Vinster/Förluster: '. $this->userStats['Wins'] .'/'.$this->userStats['Losses'].'</p>
 			<h2>VÄLJ ETT GAMEMODE!</h2>
 			<form method="post"> 
 				<fieldset>

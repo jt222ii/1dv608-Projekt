@@ -26,8 +26,6 @@ class RegisterController {
 			if($this->RegisterView->doesPasswordsMatch() && $this->RegisterView->wasValidInput())
 			{
 				$result = $this->uDAL->addUserToDatabase($this->user);
-				//$_SESSION['successfulRegistration'] = $result;
-				//$_SESSION['successfulRegistrationUsername'] = $this->unameInput;
 				$this->SessionManager->SessionSuccessfulRegistration($result);
 				$this->SessionManager->SessionSuccessfulRegistrationUsername($this->unameInput);
 			}

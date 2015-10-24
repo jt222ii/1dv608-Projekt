@@ -71,6 +71,8 @@ class RegisterView {
 		$this->message = '';
 		if($this->hasUserTriedToRegister())
 		{
+			var_dump($this->SessionManager->SessionGetSuccessfulRegistration() != null);
+			var_dump($this->SessionManager->SessionGetSuccessfulRegistration());
 			if(!$this->SessionManager->SessionGetSuccessfulRegistration()) 
 			{
 				$this->message .= "User exists, pick another username.<br />";

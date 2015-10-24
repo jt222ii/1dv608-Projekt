@@ -13,11 +13,6 @@ class GameModel {
 		$this->userDAL = $userDAL;
 		$this->SessionManager = $SessionManager;
 		$this->SessionManager->SessionSetStartScores();
-		// if(!$this->isSessionsSet())
-		// {
-		// 	$_SESSION[$this->playerScore] = 0;
-		// 	$_SESSION[$this->computerScore] = 0;
-		// }
 	}
 	public function roundsToWin(){
 		return $this->SessionManager->SessionGetRoundsToWin();
@@ -29,11 +24,8 @@ class GameModel {
 		return $this->userWinRound;
 	}
 	public function diduserWinTheGame(){
-		// if(isset($_SESSION["RoundsToWin"]))
-		// {
 		if($this->SessionManager->SessionGetRoundsToWin() != null)
 		{
-			// if($_SESSION[$this->playerScore] == $_SESSION["RoundsToWin"])
 			$scores = $this->SessionManager->SessionGetScores();
 			if($scores['PlayerScore'] == $this->SessionManager->SessionGetRoundsToWin()){
 				return true;
@@ -41,14 +33,8 @@ class GameModel {
 		}
 	}
 	public function didcomputerWinTheGame(){
-		// if(isset($_SESSION["RoundsToWin"]))
-		// {
 		if($this->SessionManager->SessionGetRoundsToWin() != null)
 		{
-			// if($_SESSION[$this->computerScore] == $_SESSION["RoundsToWin"])
-			// {
-			// 	return true;
-			// }
 			$scores = $this->SessionManager->SessionGetScores();
 			if($scores['ComputerScore'] == $this->SessionManager->SessionGetRoundsToWin()){
 				return true;
@@ -77,20 +63,17 @@ class GameModel {
 			}
 			if($this->userWinRound)
 			{
-				//$_SESSION[$this->playerScore]++;
 				$this->SessionManager->SessionAddScoreToPlayer();
 			}
 			else
 			{
 				if($userMove != $this->computerMove) //Det får inte bli lika
 				{
-					//$_SESSION[$this->computerScore]++;
 					$this->SessionManager->SessionAddScoreToComputer();
 				}
 			}
 			if($this->didcomputerWinTheGame() || $this->diduserWinTheGame())
 			{
-				//$this->userDAL->addResultToUser($this->diduserWinTheGame(), $_SESSION['LoggedInUser']);
 				$this->userDAL->addResultToUser($this->diduserWinTheGame(), $this->SessionManager->SessionGetLoggedInUser());
 			}
 		}
@@ -138,22 +121,8 @@ class GameModel {
 	}
 	
 	public function getScore(){
-		// if(isset($_SESSION[$this->playerScore]) && isset($_SESSION[$this->computerScore]))
-		// {
-		var_dump($this->SessionManager->SessionGetScores());
-			return $this->SessionManager->SessionGetScores();
-			//return array($_SESSION[$this->playerScore], $_SESSION[$this->computerScore]);
-		// }
+		return $this->SessionManager->SessionGetScores();
 	}
 
-	//kanske ska tas bort
-	// public function isSessionsSet()
-	// {
-	// 	if(isset($_SESSION[$this->playerScore]) && isset($_SESSION[$this->computerScore]))
-	// 	{
-	// 		return true;
-	// 	}
-	// 	return false;
-	// }
 
 }

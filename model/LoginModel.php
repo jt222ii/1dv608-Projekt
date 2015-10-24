@@ -3,14 +3,12 @@ require_once('model/User.php');
 class LoginModel {
 	private $userDAL;
 	private $user;
+	private $SessionManager;
 
-	public function __construct($userDAL)
+	public function __construct(userDAL $userDAL, SessionManager $SessionManager)
 	{
+		$this->SessionManager = $SessionManager;
 		$this->userDAL = $userDAL;
-		if(!isset($_SESSION['userLoggedIn']))
-		{
-			$_SESSION['userLoggedIn'] = false;
-		}
 	}
 
 	public function attemptLogin($Uname, $Pword){
@@ -19,19 +17,19 @@ class LoginModel {
 		{
 			if($this->user->comparePassword($Pword))		
 			{			
-	 			$_SESSION['userLoggedIn'] = true;
-	 			$_SESSION['LoggedInUser'] = $Uname;		
+				$this->SessionManager->SessionSetLoggedInUser($Uname);
+				$this->SessionManager->SessionSetIsUserLoggedIn(true);
 			}
 		}
 	}
 	public function logout(){
- 			$_SESSION['userLoggedIn'] = false;	
- 			unset($_SESSION['LoggedInUser']);		
+			$this->SessionManager->SessionSetIsUserLoggedIn(false);
+ 			$this->SessionManager->SessionSetLoggedInUser("");		
 	}
 	public function isUserLoggedIn(){
-		if($_SESSION['userLoggedIn'])
+		if($this->SessionManager->SessionGetIsUserLoggedIn() != null)
 		{
-			return $_SESSION['userLoggedIn'];
+			return $this->SessionManager->SessionGetIsUserLoggedIn();
 		}
 		return false;
 	}

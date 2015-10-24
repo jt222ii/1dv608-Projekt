@@ -43,7 +43,9 @@ class GameController {
 		{
 			$this->SessionManager->SessionUnsetGameSessions();
 			$this->userStats = $this->userDAL->getUserStats($this->SessionManager->SessionGetLoggedInUser());
-			$this->View = new StartView($this->userStats);
+			var_dump($this->SessionManager->SessionGetLoggedInUser());
+			var_dump($this->userStats);
+			$this->View = new StartView($this->userStats, $this->SessionManager);
 			if($this->View->userChoseGameMode())
 			{
 				$this->SessionManager->SessionRoundsToWin($this->View->getHowManyRoundsToBePlayed());

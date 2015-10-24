@@ -20,8 +20,8 @@ class MasterController {
 		$rootLocation = "Location:http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 		$lv = new LayoutView();
 		$ud = new userDAL();
-		$lm = new LoginModel($ud);
 		$sm = new SessionManager();
+		$lm = new LoginModel($ud, $sm);
 		if(!$lm->isUserLoggedIn()){
 			if(isset($_GET['register']))
 			{
@@ -29,7 +29,6 @@ class MasterController {
 				$v = new RegisterView($validate, $sm);
 				$c = new RegisterController($v, $ud, $sm);
 				$c->userPost();
-				//if(isset($_SESSION['successfulRegistration']) && $_SESSION['successfulRegistration'] == true)
 				if($sm->SessionGetSuccessfulRegistration())
 				{
 					header($rootLocation);
