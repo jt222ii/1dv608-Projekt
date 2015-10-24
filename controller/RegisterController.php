@@ -9,10 +9,12 @@ class RegisterController {
 
 	private $unameInput;
 	private $pwordInput;
+	private $SessionManager;
 
-	public function __construct(RegisterView $RegisterView, userDAL $uDAL){
+	public function __construct(RegisterView $RegisterView, userDAL $uDAL, SessionManager $SessionManager){
 		$this->RegisterView = $RegisterView;
 		$this->uDAL = $uDAL;
+		$this->SessionManager = $SessionManager;
 	}
 	//If user wants to register. Creates a new user object and checks if everything was valid. If it was -> adds the user to the database
 	public function userPost(){
@@ -24,8 +26,10 @@ class RegisterController {
 			if($this->RegisterView->doesPasswordsMatch() && $this->RegisterView->wasValidInput())
 			{
 				$result = $this->uDAL->addUserToDatabase($this->user);
-				$_SESSION['successfulRegistration'] = $result;
-				$_SESSION['successfulRegistrationUsername'] = $this->unameInput;
+				//$_SESSION['successfulRegistration'] = $result;
+				//$_SESSION['successfulRegistrationUsername'] = $this->unameInput;
+				$this->SessionManager->SessionSuccessfulRegistration($result);
+				$this->SessionManager->SessionSuccessfulRegistrationUsername($this->unameInput);
 			}
 		}	
 	}

@@ -16,11 +16,12 @@ class LoginView {
 
 	private $userJustLoggedOut = false;
 	private $userJustLoggedIn = false;
+	private $SessionManager;
 
 
-
-	public function __construct(LoginModel $loginModel){
+	public function __construct(LoginModel $loginModel, SessionManager $SessionManager){
 		$this->LoginModel = $loginModel;
+		$this->SessionManager = $SessionManager;
 	}
 
 	public function hasUserTriedToLogin(){
@@ -47,10 +48,11 @@ class LoginView {
 
 	public function setMessage(){
 		$this->message = '';
-		if(isset($_SESSION['successfulRegistration']) && $_SESSION['successfulRegistration'] == true) 
+		//if(isset($_SESSION['successfulRegistration']) && $_SESSION['successfulRegistration'] == true) 
+		if($this->SessionManager->SessionGetSuccessfulRegistration())
 		{
 			$this->message = 'Registered new user.';
-			unset($_SESSION['successfulRegistration']);
+			$this->SessionManager->SessionUnsetSuccessfulRegistration();
 		}
 		if($this->hasUserTriedToLogin())
 		{

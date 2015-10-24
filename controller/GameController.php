@@ -14,15 +14,17 @@ class GameController {
 	private $LoginModel;
 	private $View;
 	private $userDAL;
-	public function __construct(LoginModel $LoginModel, userDAL $userDAL){
+	private $SessionManager;
+	public function __construct(LoginModel $LoginModel, userDAL $userDAL, SessionManager $SessionManager){
 		$this->userDAL = $userDAL;
 		$this->LoginModel = $LoginModel;
+		$this->SessionManager = $SessionManager;
 	}
 	public function startApp(){
 		$lv = new LayoutView();
 		if(isset($_GET['game']) )
 		{
-			$gm = new GameModel($this->userDAL);
+			$gm = new GameModel($this->userDAL, $this->SessionManager);
 			$this->View = new GameView($gm);
 			if($this->View->userChoseScissors())
 			{
@@ -39,20 +41,12 @@ class GameController {
 		}
 		else
 		{
-			if(isset($_SESSION["playerScore"]) && isset($_SESSION["computerScore"]))//ska nog flytta allt detta till någon form av sessionhandler
-			{
-				unset($_SESSION["playerScore"]);
-				unset($_SESSION["computerScore"]);
-			}
-			if(isset($_SESSION["RoundsToWin"]))
-			{	
-				unset($_SESSION["RoundsToWin"]);
-			}
-			$this->userStats = $this->userDAL->getUserStats($_SESSION['LoggedInUser']);
+			$this->SessionManager->SessionUnsetGameSessions();
+			$this->userStats = $this->userDAL->getUserStats($this->SessionManager->SessionGetLoggedInUser());
 			$this->View = new StartView($this->userStats);
 			if($this->View->userChoseGameMode())
 			{
-				$_SESSION["RoundsToWin"] = $this->View->getHowManyRoundsToBePlayed();
+				$this->SessionManager->SessionRoundsToWin($this->View->getHowManyRoundsToBePlayed());
 				header("location:?game");
 			}
 		}

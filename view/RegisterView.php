@@ -15,9 +15,11 @@ class RegisterView {
 
 	private $ValidateCredentials;
 	private $wasValidCredentials;
+	private $SessionManager;
 
-	public function __construct(ValidateCredentials $ValidateCredentials){
+	public function __construct(ValidateCredentials $ValidateCredentials, SessionManager $SessionManager){
 		$this->ValidateCredentials = $ValidateCredentials;
+		$this->SessionManager = $SessionManager;
 	}
 	public function response() {
 		$response = "";
@@ -69,10 +71,9 @@ class RegisterView {
 		$this->message = '';
 		if($this->hasUserTriedToRegister())
 		{
-			if(isset($_SESSION['successfulRegistration']) && !$_SESSION['successfulRegistration']) // går nog lösas utan session TODO: asd
+			if(!$this->SessionManager->SessionGetSuccessfulRegistration()) 
 			{
 				$this->message .= "User exists, pick another username.<br />";
-				unset($_SESSION['successfulRegistration']);
 			}
 			if(!$this->ValidateCredentials->isUserNameValid())
 			{	

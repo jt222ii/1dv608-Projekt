@@ -6,10 +6,12 @@ require_once('view/LayoutView.php');
 require_once('view/RegisterView.php');
 require_once('controller/LoginController.php');
 require_once('controller/RegisterController.php');
+require_once('controller/GameController.php');
 require_once('model/LoginModel.php');
 require_once('model/validateCredentials.php');
 require_once('model/userDAL.php');
-require_once('controller/GameController.php');
+require_once('model/SessionManager.php');
+
 
 class MasterController {
 	/*error_reporting(E_ALL);
@@ -19,28 +21,30 @@ class MasterController {
 		$lv = new LayoutView();
 		$ud = new userDAL();
 		$lm = new LoginModel($ud);
+		$sm = new SessionManager();
 		if(!$lm->isUserLoggedIn()){
 			if(isset($_GET['register']))
 			{
 				$validate = new ValidateCredentials();
-				$v = new RegisterView($validate);
-				$c = new RegisterController($v, $ud);
+				$v = new RegisterView($validate, $sm);
+				$c = new RegisterController($v, $ud, $sm);
 				$c->userPost();
-				if(isset($_SESSION['successfulRegistration']) && $_SESSION['successfulRegistration'] == true)
+				//if(isset($_SESSION['successfulRegistration']) && $_SESSION['successfulRegistration'] == true)
+				if($sm->SessionGetSuccessfulRegistration())
 				{
 					header($rootLocation);
 				}
 			}	
 			else
 			{
-				$v = new LoginView($lm);
+				$v = new LoginView($lm, $sm);
 				$c = new LoginController($v, $lm);	
 				$c->userPost();
 			}	
 		}
 		if($lm->isUserLoggedIn())
 		{
-			$c = new GameController($lm, $ud);
+			$c = new GameController($lm, $ud, $sm);
 			$v = $c->startApp();
 			if($c->userWantsToLogout()){
 				header($rootLocation);

@@ -38,9 +38,9 @@ class GameView {
 	private function gameForm() {
 		//ska tas bort
 		$gameModeString = "";
-		if(isset($_SESSION["RoundsToWin"]))
+		if($this->gameModel->roundsToWin() != null)
 		{
-			$gameModeString = "This is a first to ".$_SESSION["RoundsToWin"];
+			$gameModeString = "This is a first to ".$this->gameModel->roundsToWin();
 		}
 		//
 		return '
@@ -62,7 +62,6 @@ class GameView {
 				$resultstring = 'You chose ' . $this->userChoiceAsString() . ' and the computer chose '. $this->computerMoveAsString() .".";
 				if($this->gameModel->didUserWinTheRound())
 				{
-					//var_dump($this->gameModel->diduserWinTheGame());
 					if($this->gameModel->diduserWinTheGame()){
 						$resultstring.= " You won the game!";
 					}
@@ -114,7 +113,7 @@ class GameView {
 	}
 	public function getScoreString(){
 		$scores = $this->gameModel->getScore();
-		return $scores[0]."-".$scores[1];
+		return $scores['PlayerScore']."-".$scores['ComputerScore'];
 	}
 	public function userChosePaper(){
 		if(isset($_POST[self::$paper]))

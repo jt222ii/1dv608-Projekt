@@ -6,15 +6,21 @@ class GameModel {
 	private $playerScore = "playerScore";
 	private $computerScore = "computerScore";
 	private $userDAL;
+	private $SessionManager;
 
-	public function __construct(userDAL $userDAL)
+	public function __construct(userDAL $userDAL, SessionManager $SessionManager)
 	{
 		$this->userDAL = $userDAL;
-		if(!$this->isSessionsSet())
-		{
-			$_SESSION[$this->playerScore] = 0;
-			$_SESSION[$this->computerScore] = 0;
-		}
+		$this->SessionManager = $SessionManager;
+		$this->SessionManager->SessionSetStartScores();
+		// if(!$this->isSessionsSet())
+		// {
+		// 	$_SESSION[$this->playerScore] = 0;
+		// 	$_SESSION[$this->computerScore] = 0;
+		// }
+	}
+	public function roundsToWin(){
+		return $this->SessionManager->SessionGetRoundsToWin();
 	}
 	public function getComputersMove(){
 		return $this->computerMove;
@@ -23,18 +29,28 @@ class GameModel {
 		return $this->userWinRound;
 	}
 	public function diduserWinTheGame(){
-		if(isset($_SESSION["RoundsToWin"]))
+		// if(isset($_SESSION["RoundsToWin"]))
+		// {
+		if($this->SessionManager->SessionGetRoundsToWin() != null)
 		{
-			if($_SESSION[$this->playerScore] == $_SESSION["RoundsToWin"]){
+			// if($_SESSION[$this->playerScore] == $_SESSION["RoundsToWin"])
+			$scores = $this->SessionManager->SessionGetScores();
+			if($scores['PlayerScore'] == $this->SessionManager->SessionGetRoundsToWin()){
 				return true;
 			}
 		}
 	}
 	public function didcomputerWinTheGame(){
-		if(isset($_SESSION["RoundsToWin"]))
+		// if(isset($_SESSION["RoundsToWin"]))
+		// {
+		if($this->SessionManager->SessionGetRoundsToWin() != null)
 		{
-			if($_SESSION[$this->computerScore] == $_SESSION["RoundsToWin"])
-			{
+			// if($_SESSION[$this->computerScore] == $_SESSION["RoundsToWin"])
+			// {
+			// 	return true;
+			// }
+			$scores = $this->SessionManager->SessionGetScores();
+			if($scores['ComputerScore'] == $this->SessionManager->SessionGetRoundsToWin()){
 				return true;
 			}
 		}
@@ -43,7 +59,7 @@ class GameModel {
 	{
 		//test
 		//1 sax, 2 sten, 3 påse
-		$this->rndMoveFromStats(); // ta bort eller använd istället för mt_rand
+		//$this->rndMoveFromStats(); // ta bort eller använd istället för mt_rand
 		$this->computerMove = mt_rand(1, 3);
 		if(!$this->diduserWinTheGame() && !$this->didcomputerWinTheGame())
 		{
@@ -61,18 +77,21 @@ class GameModel {
 			}
 			if($this->userWinRound)
 			{
-				$_SESSION[$this->playerScore]++;
+				//$_SESSION[$this->playerScore]++;
+				$this->SessionManager->SessionAddScoreToPlayer();
 			}
 			else
 			{
 				if($userMove != $this->computerMove) //Det får inte bli lika
 				{
-					$_SESSION[$this->computerScore]++;
+					//$_SESSION[$this->computerScore]++;
+					$this->SessionManager->SessionAddScoreToComputer();
 				}
 			}
 			if($this->didcomputerWinTheGame() || $this->diduserWinTheGame())
 			{
-				$this->userDAL->addResultToUser($this->diduserWinTheGame(), $_SESSION['LoggedInUser']);
+				//$this->userDAL->addResultToUser($this->diduserWinTheGame(), $_SESSION['LoggedInUser']);
+				$this->userDAL->addResultToUser($this->diduserWinTheGame(), $this->SessionManager->SessionGetLoggedInUser());
 			}
 		}
 	}
@@ -119,20 +138,22 @@ class GameModel {
 	}
 	
 	public function getScore(){
-		if(isset($_SESSION[$this->playerScore]) && isset($_SESSION[$this->computerScore]))
-		{
-			return array($_SESSION[$this->playerScore], $_SESSION[$this->computerScore]);
-		}
+		// if(isset($_SESSION[$this->playerScore]) && isset($_SESSION[$this->computerScore]))
+		// {
+		var_dump($this->SessionManager->SessionGetScores());
+			return $this->SessionManager->SessionGetScores();
+			//return array($_SESSION[$this->playerScore], $_SESSION[$this->computerScore]);
+		// }
 	}
 
 	//kanske ska tas bort
-	public function isSessionsSet()
-	{
-		if(isset($_SESSION[$this->playerScore]) && isset($_SESSION[$this->computerScore]))
-		{
-			return true;
-		}
-		return false;
-	}
+	// public function isSessionsSet()
+	// {
+	// 	if(isset($_SESSION[$this->playerScore]) && isset($_SESSION[$this->computerScore]))
+	// 	{
+	// 		return true;
+	// 	}
+	// 	return false;
+	// }
 
 }
