@@ -71,11 +71,11 @@ class RegisterView {
 		$this->message = '';
 		if($this->hasUserTriedToRegister())
 		{
-			var_dump($this->SessionManager->SessionGetSuccessfulRegistration() != null);
-			var_dump($this->SessionManager->SessionGetSuccessfulRegistration());
-			if(!$this->SessionManager->SessionGetSuccessfulRegistration()) 
+			$RegSuccess = $this->SessionManager->SessionGetSuccessfulRegistration();
+			if(!$RegSuccess && isset($RegSuccess)) 
 			{
 				$this->message .= "User exists, pick another username.<br />";
+				$this->SessionManager->SessionUnsetSuccessfulRegistration();
 			}
 			if(!$this->ValidateCredentials->isUserNameValid())
 			{	

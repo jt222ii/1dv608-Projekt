@@ -63,8 +63,6 @@ class SessionManager{
 
 	//score sessions
 	public function SessionSetStartScores(){
-		var_dump(isset($_SESSION[self::$PlayerScore]));
-		var_dump(isset($_SESSION[self::$ComputerScore]));
 		if(!isset($_SESSION[self::$PlayerScore]) && !isset($_SESSION[self::$ComputerScore]))
 		{
 			$_SESSION[self::$PlayerScore] = 0;
