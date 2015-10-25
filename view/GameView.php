@@ -16,7 +16,7 @@ class GameView {
 	}
 
 	public function response() {
-		echo "Rad 19 gameview - Skapa sessionhandler, glöm inte heller felhantering i DAL";
+		echo "Rad 19 gameview - glöm inte felhantering i DAL(?)";
 		if($this->gameModel->didUserWinTheGame() || $this->gameModel->didcomputerWinTheGame())
 		{
 			$this->disableInput();
@@ -36,13 +36,11 @@ class GameView {
 	* @return  void, BUT writes to standard output!
 	*/
 	private function gameForm() {
-		//ska tas bort
 		$gameModeString = "";
 		if($this->gameModel->roundsToWin() != null)
 		{
 			$gameModeString = "This is a first to ".$this->gameModel->roundsToWin();
 		}
-		//
 		return '
 			<form method="post" > 
 				<fieldset>

@@ -3,14 +3,10 @@
 require_once('view/GameView.php');
 require_once('view/LayoutView.php');
 require_once('view/StartView.php');
-//require_once('controller/GameController.php');
-//require_once('controller/StartController.php');
 require_once('model/GameModel.php');
-require_once('choices.php');
+require_once('model/choices.php');
 
 class GameController {
-	/*error_reporting(E_ALL);
-	ini_set('display_errors', 'On');*/
 	private $LoginModel;
 	private $View;
 	private $userDAL;

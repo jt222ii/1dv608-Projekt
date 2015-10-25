@@ -44,4 +44,11 @@ class LayoutView {
       return '<a href=?register>Register a new user</a>';
     }
   }
+  public function userWantsToRegister(){
+    return isset($_GET['register']);
+  }
+  public function userWantsToPlay(){
+    return isset($_GET['game']);
+  }
+
 }

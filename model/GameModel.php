@@ -7,6 +7,7 @@ class GameModel {
 	private $computerScore = "computerScore";
 	private $userDAL;
 	private $SessionManager;
+	private $numberOfPastUserMovesToStore = 10;
 
 	public function __construct(userDAL $userDAL, SessionManager $SessionManager)
 	{
@@ -41,12 +42,11 @@ class GameModel {
 			}
 		}
 	}
-	public function playGame($userMove) //jävla många ifsatser. Kanske går att snygga upp
+	public function playGame($userMove)
 	{
-		//test
-		//1 sax, 2 sten, 3 påse
-		//$this->rndMoveFromStats(); // ta bort eller använd istället för mt_rand
-		$this->computerMove = mt_rand(1, 3);
+		$this->computerMove = $this->moveBasedOnPreviousPlayerMoves();
+		$this->saveUserMove($userMove);
+		
 		if(!$this->diduserWinTheGame() && !$this->didcomputerWinTheGame())
 		{
 			if($userMove == choice::$scissors && $this->computerMove == choice::$paper)
@@ -67,7 +67,7 @@ class GameModel {
 			}
 			else
 			{
-				if($userMove != $this->computerMove) //Det får inte bli lika
+				if($userMove != $this->computerMove)
 				{
 					$this->SessionManager->SessionAddScoreToComputer();
 				}
@@ -79,44 +79,135 @@ class GameModel {
 		}
 	}
 
-	public function rndMoveFromStats(){
-		var_dump("ta bort eller fixa denna");
-		//gör double run? fast inte alltid isf
-		//http://andrewgelman.com/2007/05/21/how_to_win_at_r/
-		//gör så att ju fler gånger användaren spelar något i rad ju större chans att datorn kontrar
-
-		//annars:
-		//hämta statistiken och välj beroende på det
-		//byt ut siffrorna till att hämta en array istället 
-		$totalUserMoves = 1200; 
-		$totalRock = 400;
-		$totalPaper = 400;
-		$totalScissor = 400;
-
-		$rockProbability = $totalRock/$totalUserMoves;
-		$paperProbability = $totalPaper/$totalUserMoves;
-		$scissorProbability = $totalScissor/$totalUserMoves;
-		$rnd = mt_rand(1, 100);
-
-		$maxToCounterRock = $rockProbability*100;
-		$maxToCounterPaper = $maxToCounterRock + $paperProbability*100;
-		$maxToCounterScissor = $maxToCounterPaper + $scissorProbability*100;
-		if($rnd <= $maxToCounterRock)
+	public function saveUserMove($userMove){
+		$this->SessionManager->SessionAddToMoveHistory($userMove, $this->numberOfPastUserMovesToStore);
+	}
+	public function getPastUserMoves(){
+		return $this->SessionManager->SessionGetMoveHistory();
+	}
+	//Bases the next move on past playermoves. If no pattern in the users choices is found returns a random move.
+	public function moveBasedOnPreviousPlayerMoves(){
+		//look for a pattern the past 3 moves
+		$pastMovesFromUser = $this->getPastUserMoves();
+		if($pastMovesFromUser != null)
 		{
-			echo "Kontrar sten";
-			return choice::$paper;
+			$computerChoice = $this->lookForPatternsPastThreeMoves($pastMovesFromUser);
+			if($computerChoice != null)
+			{
+				return $computerChoice;
+			}	
+			//look for a pattern the past 4 moves
+			$computerChoice = $this->lookForPatternsPastFourMoves($pastMovesFromUser);
+			if($computerChoice != null)
+			{
+				return $computerChoice;
+			}		
+			//look for a pattern the past 6 moves
+			$computerChoice = $this->lookForPatternsPastSixMoves($pastMovesFromUser);
+			if($computerChoice != null)
+			{
+				return $computerChoice;
+			}	
+		}	
+		//If no specific pattern from the user is found or if there is no data yet we just make a random move.
+		return mt_rand(1, 3);
+	}
+
+	public function lookForPatternsPastThreeMoves($pastMovesFromUser){
+		//If user keeps spamming one move the computer will counter that move
+		$lastThreeChoices = array_slice($pastMovesFromUser, -3, 3, false);
+		if(count(array_unique($lastThreeChoices)) === 1)
+		{
+			if (end($lastThreeChoices) === choice::$rock) {
+				return choice::$paper;
+			}
+			else if (end($lastThreeChoices) === choice::$paper) {
+				return choice::$scissors;
+			}
+			else if (end($lastThreeChoices) === choice::$scissors) {
+				return choice::$rock;
+			}
 		}
+	}
 
-		else if($rnd <= $maxToCounterPaper)
+	public function lookForPatternsPastFourMoves($pastMovesFromUser){
+		//if user alternates moves but always uses one particular move every second time. That move gets countered.
+		$lastFourChoices = array_slice($pastMovesFromUser, -4, 4, false);
+		$everySecondValues = array();
+		$i = 0;
+		foreach($lastFourChoices as $choice)
 		{
-			echo "Kontrar papper";
-			return choice::$scissors;
+			if($i % 2 == 0)
+			{
+				$everySecondValues[] = $choice;
+			}
+			$i++;
 		}
-		
-		else if($rnd <= $maxToCounterScissor)
+		if(count(array_unique($everySecondValues)) === 1 )
 		{
-			echo "Kontrar sax";
-			return choice::$rock;
+			if (end($everySecondValues) === choice::$rock) {
+				return choice::$paper;
+			}
+			else if (end($everySecondValues) === choice::$paper) {
+				return choice::$scissors;
+			}
+			else if (end($everySecondValues) === choice::$scissors) {
+				return choice::$rock;
+			}
+		}	
+	}
+
+	public function lookForPatternsPastSixMoves($pastMovesFromUser){
+		$lastSixChoices = array_slice($pastMovesFromUser, -6, 6, false);
+		$everyThirdValue = array();
+		$i = 0;
+		foreach($lastSixChoices as $choice)
+		{
+			if($i % 3 == 0)
+			{
+				$everyThirdValue[] = $choice;
+			}
+			$i++;
+		}
+		//if user chooses every move in order clockwise
+		if(	$lastSixChoices[0] == 1 && $lastSixChoices[1] == 2 && $lastSixChoices[2] == 3 || 
+			$lastSixChoices[0] == 2 && $lastSixChoices[1] == 3 && $lastSixChoices[2] == 1 ||
+			$lastSixChoices[0] == 3 && $lastSixChoices[1] == 1 && $lastSixChoices[2] == 2)
+		{
+			if(count(array_unique($everyThirdValue)) === 1 )
+			{
+				$expectedChoice = end($everyThirdValue);
+				var_dump($expectedChoice);
+				if ($expectedChoice == choice::$scissors) {
+					return choice::$rock;
+				}
+				else if($expectedChoice == choice::$rock)
+				{
+					return choice::$paper;
+				}
+				else
+				{
+					return choice::$scissors;
+				}
+			}
+		}
+		//if user chooses every move in order counter-clockwise
+		else if(count(array_unique($everyThirdValue)) === 1 )
+		{
+			$expectedChoice = end($everyThirdValue);
+			if($expectedChoice == choice::$rock)
+			{
+				return choice::$paper;
+			}
+			else if($expectedChoice == choice::$paper)
+			{
+				return choice::$scissors;
+			}
+			else if($expectedChoice == choice::$scissors)
+			{
+				return choice::$rock;
+			}
+			
 		}
 	}
 	

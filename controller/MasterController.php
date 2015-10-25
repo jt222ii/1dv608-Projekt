@@ -14,8 +14,7 @@ require_once('model/SessionManager.php');
 
 
 class MasterController {
-	/*error_reporting(E_ALL);
-	ini_set('display_errors', 'On');*/
+
 	public function startApp(){
 		$rootLocation = "Location:http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 		$lv = new LayoutView();
@@ -23,7 +22,7 @@ class MasterController {
 		$sm = new SessionManager();
 		$lm = new LoginModel($ud, $sm);
 		if(!$lm->isUserLoggedIn()){
-			if(isset($_GET['register']))
+			if($lv->userWantsToRegister())
 			{
 				$validate = new ValidateCredentials();
 				$v = new RegisterView($validate, $sm);

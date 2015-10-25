@@ -17,13 +17,13 @@ class LoginModel {
 		{
 			if($this->user->comparePassword($Pword))		
 			{			
+				$this->SessionManager->SessionIsUserLoggedIn(true);
 				$this->SessionManager->SessionSetLoggedInUser($Uname);
-				$this->SessionManager->SessionSetIsUserLoggedIn(true);
 			}
 		}
 	}
 	public function logout(){
-			$this->SessionManager->SessionSetIsUserLoggedIn(false);
+			$this->SessionManager->SessionIsUserLoggedIn(false);
  			$this->SessionManager->SessionSetLoggedInUser("");		
 	}
 	public function isUserLoggedIn(){
