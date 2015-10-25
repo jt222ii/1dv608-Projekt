@@ -44,8 +44,10 @@ class GameModel {
 	}
 	public function playGame($userMove)
 	{
+
 		$this->computerMove = $this->moveBasedOnPreviousPlayerMoves();
 		$this->saveUserMove($userMove);
+
 		
 		if(!$this->diduserWinTheGame() && !$this->didcomputerWinTheGame())
 		{
@@ -115,7 +117,8 @@ class GameModel {
 
 	public function lookForPatternsPastThreeMoves($pastMovesFromUser){
 		//If user keeps spamming one move the computer will counter that move
-		$lastThreeChoices = array_slice($pastMovesFromUser, -3, 3, false);
+		
+		$lastThreeChoices = array_slice($pastMovesFromUser, -3);
 		if(count(array_unique($lastThreeChoices)) === 1)
 		{
 			if (end($lastThreeChoices) === choice::$rock) {
@@ -132,7 +135,7 @@ class GameModel {
 
 	public function lookForPatternsPastFourMoves($pastMovesFromUser){
 		//if user alternates moves but always uses one particular move every second time. That move gets countered.
-		$lastFourChoices = array_slice($pastMovesFromUser, -4, 4, false);
+		$lastFourChoices = array_slice($pastMovesFromUser, -4);
 		$everySecondValues = array();
 		$i = 0;
 		foreach($lastFourChoices as $choice)
@@ -143,7 +146,8 @@ class GameModel {
 			}
 			$i++;
 		}
-		if(count(array_unique($everySecondValues)) === 1 )
+		//if(count(array_unique($everySecondValues)) === 1)
+		if($lastFourChoices[1] == $lastFourChoices[3])
 		{
 			if (end($everySecondValues) === choice::$rock) {
 				return choice::$paper;
@@ -158,7 +162,7 @@ class GameModel {
 	}
 
 	public function lookForPatternsPastSixMoves($pastMovesFromUser){
-		$lastSixChoices = array_slice($pastMovesFromUser, -6, 6, false);
+		$lastSixChoices = array_slice($pastMovesFromUser, -6);
 		$everyThirdValue = array();
 		$i = 0;
 		foreach($lastSixChoices as $choice)
@@ -177,7 +181,6 @@ class GameModel {
 			if(count(array_unique($everyThirdValue)) === 1 )
 			{
 				$expectedChoice = end($everyThirdValue);
-				var_dump($expectedChoice);
 				if ($expectedChoice == choice::$scissors) {
 					return choice::$rock;
 				}
@@ -192,7 +195,8 @@ class GameModel {
 			}
 		}
 		//if user chooses every move in order counter-clockwise
-		else if(count(array_unique($everyThirdValue)) === 1 )
+		//else if(count(array_unique($everyThirdValue)) === 1 )
+		else if($lastSixChoices[2] == $lastSixChoices[5])
 		{
 			$expectedChoice = end($everyThirdValue);
 			if($expectedChoice == choice::$rock)
