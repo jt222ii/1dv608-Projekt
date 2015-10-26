@@ -16,7 +16,6 @@ class GameView {
 	}
 
 	public function response() {
-		echo "Rad 19 gameview - glöm inte felhantering i DAL(?)";
 		if($this->gameModel->didUserWinTheGame() || $this->gameModel->didcomputerWinTheGame())
 		{
 			$this->disableInput();
