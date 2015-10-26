@@ -118,7 +118,6 @@ class GameModel {
 			}	
 		}	
 		//If no specific pattern from the user is found or if there is no data yet we just make a random move.
-		var_dump("SLUMPAR");
 		return mt_rand(1, 3);
 	}
 

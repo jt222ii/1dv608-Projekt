@@ -43,7 +43,7 @@ class GameView {
 		return '
 			<form method="post" > 
 				<fieldset>
-					<legend>Welcomu to the gume. ' . $gameModeString . '</legend>
+					<legend>Welcome to rock, paper, scissors! ' . $gameModeString . '</legend>
 					<p class="score"> ' . $this->getScoreString() . '</p>
 					<input type="submit" name="' . self::$rock . '" class="rock" value="ROCK" '. $this->buttonStatus. '/>
 					<input type="submit" name="' . self::$paper . '" class="paper" value="PAPER" $buttonStatus '. $this->buttonStatus. '/>
