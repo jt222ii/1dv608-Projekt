@@ -8,7 +8,7 @@ class LayoutView {
         <head>
           <meta charset="utf-8">
           <title>RUCK PUPER SCUSSORS</title>
-          <link rel="stylesheet" type="text/css" href="style.css" />
+          <link rel="stylesheet" type="text/css" href="Style.css" />
         </head>
         <body>
           <h1>ROCK PAPER SCISSORS!</h1>     
