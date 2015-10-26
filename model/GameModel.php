@@ -44,8 +44,14 @@ class GameModel {
 	}
 	public function playGame($userMove)
 	{
-
-		$this->computerMove = $this->moveBasedOnPreviousPlayerMoves();
+		//Still want it to be entirely random and 50% to win the "first to" gamemode
+		if($this->SessionManager->SessionGetRoundsToWin() != null){
+			$this->computerMove = mt_rand(1, 3);
+		}
+		//When playing indefinite rounds the computer will play smarter
+		else{
+			$this->computerMove = $this->moveBasedOnPreviousPlayerMoves();
+		}
 		$this->saveUserMove($userMove);
 
 		
@@ -112,6 +118,7 @@ class GameModel {
 			}	
 		}	
 		//If no specific pattern from the user is found or if there is no data yet we just make a random move.
+		var_dump("SLUMPAR");
 		return mt_rand(1, 3);
 	}
 
@@ -146,8 +153,7 @@ class GameModel {
 			}
 			$i++;
 		}
-		//if(count(array_unique($everySecondValues)) === 1)
-		if($lastFourChoices[1] == $lastFourChoices[3])
+		if($lastFourChoices[0] == $lastFourChoices[2])
 		{
 			if (end($everySecondValues) === choice::$rock) {
 				return choice::$paper;
@@ -162,6 +168,7 @@ class GameModel {
 	}
 
 	public function lookForPatternsPastSixMoves($pastMovesFromUser){
+
 		$lastSixChoices = array_slice($pastMovesFromUser, -6);
 		$everyThirdValue = array();
 		$i = 0;
@@ -197,7 +204,7 @@ class GameModel {
 		//if user chooses every move in order counter-clockwise
 		//else if(count(array_unique($everyThirdValue)) === 1 )
 		else if($lastSixChoices[2] == $lastSixChoices[5])
-		{
+		{						
 			$expectedChoice = end($everyThirdValue);
 			if($expectedChoice == choice::$rock)
 			{

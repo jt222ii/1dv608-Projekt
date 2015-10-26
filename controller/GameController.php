@@ -11,14 +11,16 @@ class GameController {
 	private $View;
 	private $userDAL;
 	private $SessionManager;
-	public function __construct(LoginModel $LoginModel, userDAL $userDAL, SessionManager $SessionManager){
+	private $LayoutView;
+	public function __construct(LoginModel $LoginModel, userDAL $userDAL, SessionManager $SessionManager, LayoutView $LayoutView){
 		$this->userDAL = $userDAL;
 		$this->LoginModel = $LoginModel;
 		$this->SessionManager = $SessionManager;
+		$this->LayoutView = $LayoutView;
 	}
 	public function startApp(){
 		$lv = new LayoutView();
-		if(isset($_GET['game']) )
+		if($this->LayoutView->userWantsToPlay()) 
 		{
 			$gm = new GameModel($this->userDAL, $this->SessionManager);
 			$this->View = new GameView($gm);

@@ -5,6 +5,7 @@ class StartView {
 
 	private static $firsttothree = 'StartView::firsttothree';
 	private static $firsttofive = 'StartView::firsttofive';
+	private static $infinite = 'StartView::infinite';
 	private static $logout = 'LoginView::Logout';
 	private $userStats;
 	private $SessionManager;
@@ -27,6 +28,7 @@ class StartView {
 				<fieldset>
 					<input type="submit" name="' . self::$firsttothree . '" value="First to 3" />
 					<input type="submit" name="' . self::$firsttofive . '" value="First to 5" />
+					<input type="submit" name="' . self::$infinite . '" value="Infinite vs smarter bot" />
 				</fieldset>
 				'.$this->generateLogoutButtonHTML().'
 			</form>
@@ -34,7 +36,7 @@ class StartView {
 	}
 
 	public function userChoseGameMode(){
-		if(isset($_POST[self::$firsttothree]) || isset($_POST[self::$firsttofive]))
+		if(isset($_POST[self::$firsttothree]) || isset($_POST[self::$firsttofive]) || isset($_POST[self::$infinite]))
 		{
 			return true;
 		}

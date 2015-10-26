@@ -42,7 +42,7 @@ class MasterController {
 		}
 		if($lm->isUserLoggedIn())
 		{
-			$c = new GameController($lm, $ud, $sm);
+			$c = new GameController($lm, $ud, $sm, $lv);
 			$v = $c->startApp();
 			if($c->userWantsToLogout()){
 				header($rootLocation);
