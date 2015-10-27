@@ -1,9 +1,21 @@
 # 1dv608-Projekt
-Projekt i PHP
+Installation
 
-##Vision
-Projektet ska vara ett ganska simpelt sten sax påse spel. Till att börja med ska det att bara simpelt gå att köra mot datorn i tre eller fem rundor. 
+1 - Download the repository
 
-Efter det så ska om tid finns implementeras andra svårighetsgrader där datorn inte längre bara slumpar vad de väljer utan kollar på chanser vad som väljs beroende på statistik som fåtts.
+2 - Create a new database.
 
-Om även detta gick att implementera snabbt så ska man kunna logga on och därmed se hur många man förlorat och hur många man vunnit.
+3 - Enter the following sql command to create the table:
+
+CREATE TABLE IF NOT EXISTS `member` (
+  `Username` varchar(40) NOT NULL,
+  `Password` varchar(40) NOT NULL,
+  `Wins` int(11) NOT NULL DEFAULT '0',
+  `Losses` int(11) NOT NULL DEFAULT '0',
+  `ProfilePicURL` varchar(100) NOT NULL DEFAULT 'http://i.imgur.com/W77VpWC.png?1',
+  PRIMARY KEY (`Username`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+4 - Enter the hostname, databasename, username and password in Settings.php. (Make sure that your user has full access to the database)
+
+5 - Run the application on your webserver
