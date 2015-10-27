@@ -75,16 +75,21 @@ class StartView {
 		return isset($_POST[self::$changePicUrl]);
 	}
 	public function userPicUrlValid(){
-		//return true; Den publika servern tillåter inte curl. Så då får alla länkar fungera...
-		$ch = curl_init($_POST[self::$changePicUrl]);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_exec($ch);
-
-		$result = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-		if(strpos($result, 'image/') !== false)
+		//Den publika servern tillåter inte curl. Så då får alla länkar fungera... första lösningen finns nedan
+		if(filter_var($_POST[self::$changePicUrl], FILTER_VALIDATE_URL) != false)
 		{
-				return true;
+			return true; 
 		}
+		// //000webhost stödjer inte curl byt till det utkodade om det körs där.
+		// $ch = curl_init($_POST[self::$changePicUrl]);
+		// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		// curl_exec($ch);
+
+		// $result = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+		// if(strpos($result, 'image/') !== false)
+		// {
+		// 		return true;
+		// }
 	}
 	public function getPicUrlInput(){
 		return $_POST[self::$changePicUrl];
