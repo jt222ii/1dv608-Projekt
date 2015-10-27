@@ -90,4 +90,21 @@ class userDAL {
 		return $userStats;
 	}
 
+	public function changeUserPic($url, $username)
+	{
+		$connection = $this->createConnection();
+		$sqlQuery = "UPDATE member SET ProfilePicURL = '$url' WHERE Username = '$username'";
+		$result = $connection->query($sqlQuery);
+		$this->closeConnection();
+	}
+	public function getProfilePicUrl($username)
+	{
+		$connection = $this->createConnection();
+		$sqlQuery = "SELECT ProfilePicURL FROM member WHERE Username = '$username'";
+		$result = $connection->query($sqlQuery);
+		$this->closeConnection();
+		$data = $result->fetch_array(MYSQLI_ASSOC);
+		return $data['ProfilePicURL'];
+	}
+
 }

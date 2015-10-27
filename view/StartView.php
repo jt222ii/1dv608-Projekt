@@ -6,13 +6,19 @@ class StartView {
 	private static $firsttothree = 'StartView::firsttothree';
 	private static $firsttofive = 'StartView::firsttofive';
 	private static $infinite = 'StartView::infinite';
-	private static $logout = 'LoginView::Logout';
+	private static $logout = 'StartView::Logout';
+	private static $changePic = 'StartView::changePic';
+	private static $changePicUrl = 'StartView::changePicUrl';
+	private static $submitPicUrl = 'StartView::submitPicUrl';
 	private $userStats;
 	private $SessionManager;
+	private $userProfilePic;
+	private $message = "";
 
-	public function __construct($userStats, SessionManager $SessionManager){
+	public function __construct($userStats, SessionManager $SessionManager, $userProfilePic){
 		$this->SessionManager = $SessionManager;
 		$this->userStats = $userStats;
+		$this->userProfilePic = $userProfilePic;
 	}
 	public function response() {
 		$response = "";
@@ -22,7 +28,13 @@ class StartView {
 
 	private function generateStartFormHTML() {
 		return '
-			<p>Välkommen '.$this->SessionManager->SessionGetLoggedInUser().'! Vinster/Förluster: '. $this->userStats['Wins'] .'/'.$this->userStats['Losses'].'</p>
+			<p>'.$this->message.'</p>
+			<form method="post">
+				<p>Inloggad som: </p>
+				<p><img src="'.$this->userProfilePic.'" alt="Profile pic" width="42" height="42"> '.$this->SessionManager->SessionGetLoggedInUser().'!</p>
+				'.$this->userWantsToChangeProfilePic().'
+			</form>
+			<p> Vinster/Förluster: '. $this->userStats['Wins'] .'/'.$this->userStats['Losses'].'</p>
 			<h2>VÄLJ ETT GAMEMODE!</h2>
 			<form method="post"> 
 				<fieldset>
@@ -35,12 +47,46 @@ class StartView {
 		';
 	}
 
+	public function setImageChangeSuccessMessage(){
+		$this->message = "Successfully changed avatar(might need to reload page to see changes)";
+	}
+	public function setImageChangeFailureMessage(){
+		$this->message = "Failed to change avatar";
+	}
 	public function userChoseGameMode(){
 		if(isset($_POST[self::$firsttothree]) || isset($_POST[self::$firsttofive]) || isset($_POST[self::$infinite]))
 		{
 			return true;
 		}
 		return false;
+	}
+	public function userWantsToChangeProfilePic(){
+		if(isset($_POST[self::$changePic]))
+		{
+			return '<input type="text" id="' . self::$changePicUrl . '" name="' . self::$changePicUrl . '" value="Enter pic url" />
+			<input type="submit" name="' . self::$submitPicUrl . '" value="Submit" />';
+		}
+		else
+		{
+			return '<input type="submit" name="' . self::$changePic . '" value="Change profile pic" />';
+		}
+	}
+	public function userWantsToSubmitPic(){
+		return isset($_POST[self::$changePicUrl]);
+	}
+	public function userPicUrlValid(){
+	  $ch = curl_init($_POST[self::$changePicUrl]);
+	  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	  curl_exec($ch);
+
+	  $result = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+	  if(strpos($result, 'image/') !== false)
+	  {
+	  		return true;
+	  }
+	}
+	public function getPicUrlInput(){
+		return $_POST[self::$changePicUrl];
 	}
 	public function getHowManyRoundsToBePlayed()
 	{

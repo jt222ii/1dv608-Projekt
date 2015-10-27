@@ -40,9 +40,21 @@ class GameController {
 		else
 		{
 			$this->SessionManager->SessionUnsetGameSessions();
-			$this->userStats = $this->userDAL->getUserStats($this->SessionManager->SessionGetLoggedInUser());
-			$this->View = new StartView($this->userStats, $this->SessionManager);
-			if($this->View->userChoseGameMode())
+			$loggedinUsername = $this->SessionManager->SessionGetLoggedInUser();
+			$userStats = $this->userDAL->getUserStats($loggedinUsername);
+			$userProfilePic = $this->userDAL->getProfilePicUrl($loggedinUsername);
+			$this->View = new StartView($userStats, $this->SessionManager, $userProfilePic);
+			if($this->View->userWantsToSubmitPic())
+			{
+				if($this->View->userPicUrlValid())
+				{
+					$this->userDAL->changeUserPic($this->View->getPicUrlInput(), $loggedinUsername);
+					$this->View->setImageChangeSuccessMessage();
+				}
+				else
+					$this->View->setImageChangeFailureMessage();
+			}
+			else if($this->View->userChoseGameMode())
 			{
 				$this->SessionManager->SessionRoundsToWin($this->View->getHowManyRoundsToBePlayed());
 				header("location:?game");
